@@ -1,0 +1,13 @@
+2024-12-22 06:46:03,487 - INFO - Starting model comparison on directory: silver_fish
+2024-12-22 06:46:03,488 - INFO - Results will be saved in: evaluation_results/results
+2024-12-22 06:46:03,488 - INFO - Logs will be saved in: evaluation_results/logs
+2024-12-22 06:46:03,488 - INFO - 
+Converting silver_fish/train/properties.json to TSV format...
+2024-12-22 06:46:03,488 - ERROR - Error processing silver_fish/train/properties.json: 'n_vars'
+2024-12-22 06:46:03,488 - INFO - 
+Converting silver_fish/val/properties.json to TSV format...
+2024-12-22 06:46:03,488 - ERROR - Error processing silver_fish/val/properties.json: 'n_vars'
+2024-12-22 06:46:03,488 - INFO - 
+Converting silver_fish/test/properties.json to TSV format...
+2024-12-22 06:46:03,488 - ERROR - Error processing silver_fish/test/properties.json: 'n_vars'
+2024-12-22 06:46:03,488 - WARNING - No properties.json files found in the directory!

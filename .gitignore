@@ -1,0 +1,40 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# datasets starting with filtered
+filtered_*
+
+# pmlb datasets
+pmlb_*
+
+# SRBench
+SRBench/
+sr/
+
+silver_fish/
+
+TPSR/datasets/
+
+NeuralSymbolicRegression/data/
+
+**/model.pt
+**/model1.pt
+**/model2.pt
+**/model3.pt
+**/model4.pt
+**/model5.pt
+**/model6.pt
+**/model7.pt
+**/model8.pt
+**/model9.pt
+**/model10.pt
+
+**/*.ckpt

@@ -1,0 +1,98 @@
+2024-12-22 06:47:37,760 - INFO - Starting model comparison on directory: silver_fish
+2024-12-22 06:47:37,760 - INFO - Results will be saved in: evaluation_results/results
+2024-12-22 06:47:37,760 - INFO - Logs will be saved in: evaluation_results/logs
+2024-12-22 06:47:37,760 - INFO - 
+Converting silver_fish/train/f_78.json to TSV format...
+2024-12-22 06:47:37,765 - INFO - 
+Evaluating file: filtered_datasets/train/f_78/f_78.tsv
+2024-12-22 06:47:40,253 - INFO - NeSyMReS evaluation successful
+2024-12-22 06:47:45,800 - INFO - Symbolic regression evaluation successful
+2024-12-22 06:47:45,812 - INFO - vocabulary: 10218 float words, 10277 equation words
+2024-12-22 06:47:45,812 - INFO - Training tasks: functions
+2024-12-22 06:47:46,410 - INFO - Number of parameters (embedder): 6198464
+2024-12-22 06:47:46,410 - INFO - Number of parameters (encoder): 6305792
+2024-12-22 06:47:46,411 - INFO - Number of parameters (decoder): 74642484
+2024-12-22 06:54:20,558 - INFO - TPSR evaluation successful
+2024-12-22 06:54:20,560 - INFO - 
+Results for f_78:
+2024-12-22 06:54:20,560 - INFO - 
+NESYMRES Results:
+2024-12-22 06:54:20,560 - INFO - MSE: 610.076538
+2024-12-22 06:54:20,560 - INFO - R²: 0.582560
+2024-12-22 06:54:20,560 - INFO - Equation: ['1.02176753021125*x_1*x_2*Abs(x_1) + x_3**2']
+2024-12-22 06:54:20,560 - INFO - 
+SYMBOLIC Results:
+2024-12-22 06:54:20,560 - INFO - MSE: 13.451069
+2024-12-22 06:54:20,560 - INFO - R²: 0.990796
+2024-12-22 06:54:20,560 - INFO - Equation: ((-7.8 + (-0.48800000000000004 * sqrt((90.2 + (0.9640000000000001 * ((-0.0868 + (63.5 * (-0.03542985873157864 + (0.37037044228845156 * x_0)))))**2))))) * (((((-0.008199999999999999 + (90.60000000000001 * (-0.03542985873157864 + (0.37037044228845156 * x_0)))) + (-2.63 + (0.00037 * ((-7.390000000000001 + (-18.5 * (0.2317324850321052 + (0.34144441392601055 * x_2)))))**3))) - (-7.69 + (1.79 * (-0.03542985873157864 + (0.37037044228845156 * x_0))))) * (0.00025 + (-0.0059499999999999996 * (0.058150439650769374 + (0.35876509023518116 * x_1))))) - ((0.338 + (-4.44 * (0.2317324850321052 + (0.34144441392601055 * x_2)))) * (0.06580000000000001 + (-0.135 * (0.2317324850321052 + (0.34144441392601055 * x_2)))))))
+2024-12-22 06:54:20,560 - INFO - 
+TPSR Results:
+2024-12-22 06:54:20,560 - INFO - MSE: 3.897195
+2024-12-22 06:54:20,560 - INFO - R²: 0.997333
+2024-12-22 06:54:20,560 - INFO - 
+Converting silver_fish/train/f_26.json to TSV format...
+2024-12-22 06:54:20,564 - INFO - 
+Evaluating file: filtered_datasets/train/f_26/f_26.tsv
+2024-12-22 06:54:27,605 - INFO - NeSyMReS evaluation successful
+2024-12-22 06:54:30,378 - INFO - Symbolic regression evaluation successful
+2024-12-22 06:54:30,400 - INFO - vocabulary: 10218 float words, 10277 equation words
+2024-12-22 06:54:30,401 - INFO - Training tasks: functions
+2024-12-22 06:54:30,979 - INFO - Number of parameters (embedder): 6198464
+2024-12-22 06:54:30,980 - INFO - Number of parameters (encoder): 6305792
+2024-12-22 06:54:30,980 - INFO - Number of parameters (decoder): 74642484
+2024-12-22 06:59:29,685 - INFO - TPSR evaluation successful
+2024-12-22 06:59:29,686 - INFO - 
+Results for f_26:
+2024-12-22 06:59:29,686 - INFO - 
+NESYMRES Results:
+2024-12-22 06:59:29,686 - INFO - MSE: 13.442914
+2024-12-22 06:59:29,686 - INFO - R²: -19.139989
+2024-12-22 06:59:29,686 - INFO - Equation: ['Abs(-0.481061013043543*x_1 + 0.327965875994824*x_2 + (x_2 + 0.407122607977438)/x_3)']
+2024-12-22 06:59:29,686 - INFO - 
+SYMBOLIC Results:
+2024-12-22 06:59:29,686 - INFO - MSE: 0.235815
+2024-12-22 06:59:29,686 - INFO - R²: 0.646705
+2024-12-22 06:59:29,686 - INFO - Equation: (0.008749999999999999 + (0.00934 * sqrt(((3.0100000000000002 + (-3.95 * (-0.08905917862887684 + (0.39551147899331884 * x_1)))) + (0.09000000000000001 + (51.9 * abs((((-0.00775 + 1/((-0.333 * (-0.011390713223962283 + (0.3301770851149109 * x_2))))) + (0.741 + (17.900000000000002 * (-0.011390713223962283 + (0.3301770851149109 * x_2))))) * ((0.042 + (-39.4 * (-0.08905917862887684 + (0.39551147899331884 * x_1)))) + ((-0.058300000000000005 + (-0.7260000000000001 * (0.06970539409813564 + (0.3545026443145667 * x_0)))) * (61.300000000000004 + (0.00405 * (-0.011390713223962283 + (0.3301770851149109 * x_2))))))))))))))
+2024-12-22 06:59:29,686 - INFO - 
+TPSR Results:
+2024-12-22 06:59:29,687 - INFO - MSE: 0.052299
+2024-12-22 06:59:29,687 - INFO - R²: 0.921647
+2024-12-22 06:59:29,687 - INFO - 
+Converting silver_fish/train/f_4.json to TSV format...
+2024-12-22 06:59:29,691 - INFO - 
+Evaluating file: filtered_datasets/train/f_4/f_4.tsv
+2024-12-22 06:59:32,120 - INFO - NeSyMReS evaluation successful
+2024-12-22 06:59:36,827 - INFO - Symbolic regression evaluation successful
+2024-12-22 06:59:36,838 - INFO - vocabulary: 10218 float words, 10277 equation words
+2024-12-22 06:59:36,838 - INFO - Training tasks: functions
+2024-12-22 06:59:37,401 - INFO - Number of parameters (embedder): 6198464
+2024-12-22 06:59:37,401 - INFO - Number of parameters (encoder): 6305792
+2024-12-22 06:59:37,402 - INFO - Number of parameters (decoder): 74642484
+2024-12-22 07:03:23,924 - INFO - TPSR evaluation successful
+2024-12-22 07:03:23,925 - INFO - 
+Results for f_4:
+2024-12-22 07:03:23,925 - INFO - 
+NESYMRES Results:
+2024-12-22 07:03:23,925 - INFO - MSE: 169001.937500
+2024-12-22 07:03:23,925 - INFO - R²: 0.041333
+2024-12-22 07:03:23,925 - INFO - Equation: ['x_3*exp(x_1) + cos(7.01005913496698e-8*x_2)']
+2024-12-22 07:03:23,925 - INFO - 
+SYMBOLIC Results:
+2024-12-22 07:03:23,925 - INFO - MSE: 1854.581505
+2024-12-22 07:03:23,925 - INFO - R²: 0.989480
+2024-12-22 07:03:23,925 - INFO - Equation: ((0.0396 + (0.8150000000000001 * cos((-2.49 * (0.1006936048197176 + (0.35578403004081227 * x_1)))))) + ((-0.315 + (0.554 * (-0.039064172504430957 + (0.35049592212420355 * x_2)))) + (0.00976 + (0.00953 * (((-0.0388 + (39.4 * exp((-2.52 + (-0.2670614903188131 + (0.35299763495655445 * x_0)))))) * ((0.0767 + (0.020300000000000002 * (-0.2670614903188131 + (0.35299763495655445 * x_0)))) * ((0.385 + (8.61 * (-0.039064172504430957 + (0.35049592212420355 * x_2)))) * (24.7 + (1.17 * cos((-0.00613 + (3.58 * (-0.2670614903188131 + (0.35299763495655445 * x_0)))))))))))**2))))
+2024-12-22 07:03:23,925 - INFO - 
+TPSR Results:
+2024-12-22 07:03:23,925 - INFO - MSE: 30.860668
+2024-12-22 07:03:23,925 - INFO - R²: 0.999825
+2024-12-22 07:03:23,925 - INFO - 
+Converting silver_fish/train/f_27.json to TSV format...
+2024-12-22 07:03:23,929 - INFO - 
+Evaluating file: filtered_datasets/train/f_27/f_27.tsv
+2024-12-22 07:03:28,108 - INFO - NeSyMReS evaluation successful
+2024-12-22 07:03:33,350 - INFO - Symbolic regression evaluation successful
+2024-12-22 07:03:33,362 - INFO - vocabulary: 10218 float words, 10277 equation words
+2024-12-22 07:03:33,362 - INFO - Training tasks: functions
+2024-12-22 07:03:33,937 - INFO - Number of parameters (embedder): 6198464
+2024-12-22 07:03:33,937 - INFO - Number of parameters (encoder): 6305792
+2024-12-22 07:03:33,938 - INFO - Number of parameters (decoder): 74642484
