@@ -188,7 +188,7 @@ def load_target_formula(data_dir, dataset_name):
     except:
         return None
 
-def evaluate_tsv_file(file_path, data_dir, csv_file):
+def evaluate_tsv_file(file_path, data_dir, csv_file, target_formula=None):
     """
     Evaluate a TSV file and save results immediately to CSV
     
@@ -196,12 +196,14 @@ def evaluate_tsv_file(file_path, data_dir, csv_file):
         file_path (str): Path to the TSV file
         data_dir (str): Directory containing the original JSON files
         csv_file (str): Path to the CSV file to save/append results
+        target_formula (str): The target formula from the original dataset
     """
     # Get dataset name from file path
     dataset_name = os.path.splitext(os.path.basename(file_path))[0]
     
-    # Get target formula
-    target_formula = load_target_formula(data_dir, dataset_name)
+    # If target_formula is not provided, try to load it
+    if target_formula is None:
+        target_formula = load_target_formula(data_dir, dataset_name)
     
     # Load and evaluate data
     X, y_true = load_tsv_data(file_path)

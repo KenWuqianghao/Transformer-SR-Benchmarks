@@ -80,7 +80,7 @@ def evaluate_single_file(tsv_path):
     
     # Evaluate TPSR model
     try:
-        results['tpsr'] = tpsr_evaluate(tsv_path)
+        results['tpsr'] = tpsr_evaluate(tsv_path, json_dir, results_csv, target_formula)
         logging.info("TPSR evaluation successful")
     except Exception as e:
         logging.error(f"TPSR evaluation failed: {str(e)}")
@@ -218,11 +218,16 @@ def evaluate_directory(json_dir, output_dir='evaluation_results'):
                                 nesymres_results = nesymres_evaluate(tsv_path)
                                 logging.info("NeSyMReS evaluation successful")
                                 # Save NeSyMReS results
+                                # Extract formula from list if needed
+                                prediction = nesymres_results.get('equation', None)
+                                if isinstance(prediction, list):
+                                    prediction = prediction[0] if prediction else None
+                                
                                 new_row = pd.DataFrame([{
                                     'dataset': dataset_name,
                                     'model': 'nesymres',
                                     'target_human_form': target_formula,
-                                    'prediction_human_form': nesymres_results.get('equation', None),
+                                    'prediction_human_form': prediction,
                                     'mean_squared_error': nesymres_results['mse'],
                                     'R2_score': nesymres_results['r2']
                                 }])
@@ -252,7 +257,7 @@ def evaluate_directory(json_dir, output_dir='evaluation_results'):
                             
                             # TPSR evaluation
                             try:
-                                tpsr_results = tpsr_evaluate(tsv_path, json_dir, results_csv)
+                                tpsr_results = tpsr_evaluate(tsv_path, json_dir, results_csv, target_formula)
                                 logging.info("TPSR evaluation successful")
                             except Exception as e:
                                 logging.error(f"TPSR evaluation failed: {str(e)}")
