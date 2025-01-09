@@ -120,8 +120,8 @@ def evaluate_model_predictions(model_type, model, X, y_true, params=None, equati
             update_root(agent, act, s)
             dp.update_cache(s)
         
-        # Get predictions using refine_for_sample_test
-        y_mcts_refine_train, y_mcts_refine_test, _, _ = refine_for_sample_test(
+        # Get predictions and equation using refine_for_sample_test
+        y_mcts_refine_train, y_mcts_refine_test, model_str, tree = refine_for_sample_test(
             model,
             equation_env, 
             s,  
@@ -130,11 +130,30 @@ def evaluate_model_predictions(model_type, model, X, y_true, params=None, equati
             samples['x_to_pred']
         )
         
-        # Calculate both MSE and R² using the test predictions
+        # Format the equation string
+        replace_ops = {"add": "+", "mul": "*", "sub": "-", "pow": "**", "inv": "1/"}
+        for op, replace_op in replace_ops.items():
+            if model_str:
+                model_str = model_str.replace(op, replace_op)
+        
+        # Parse equation if possible
+        try:
+            if model_str:
+                equation = sp.parse_expr(model_str)
+            else:
+                equation = None
+        except:
+            equation = None
+        
+        # Calculate metrics
         mse = mean_squared_error(y_true, y_mcts_refine_test)
         r2 = r2_score(y_true, y_mcts_refine_test)
         
-        return {'mse': mse, 'r2': r2}
+        return {
+            'mse': mse, 
+            'r2': r2,
+            'equation': str(equation) if equation else None
+        }
     
     elif model_type == 'nesymres':
         # NeSymReS implementation remains unchanged
@@ -159,25 +178,39 @@ def get_default_params():
 
     return params
 
-def evaluate_tsv_file(file_path):
+def load_target_formula(data_dir, dataset_name):
+    """Load the original formula from the dataset's JSON file"""
+    json_path = os.path.join(data_dir, dataset_name, 'data.json')
+    try:
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+            return data.get('formula', None)
+    except:
+        return None
+
+def evaluate_tsv_file(file_path, data_dir, csv_file):
     """
-    Evaluate a TSV file containing features and target values to get MSE and R² metrics.
+    Evaluate a TSV file and save results immediately to CSV
     
     Args:
         file_path (str): Path to the TSV file
-        
-    Returns:
-        dict: Dictionary containing 'mse' and 'r2' metrics
+        data_dir (str): Directory containing the original JSON files
+        csv_file (str): Path to the CSV file to save/append results
     """
-    # Load data from TSV
+    # Get dataset name from file path
+    dataset_name = os.path.splitext(os.path.basename(file_path))[0]
+    
+    # Get target formula
+    target_formula = load_target_formula(data_dir, dataset_name)
+    
+    # Load and evaluate data
     X, y_true = load_tsv_data(file_path)
     
-    # Initialize model and environment
+    # Initialize model and get predictions
     params = get_default_params()
     equation_env = build_env(params)
     build_modules(equation_env, params)
     
-    # Format data for model
     samples = {
         'x_to_fit': [X],
         'y_to_fit': [y_true.reshape(-1,1)],
@@ -185,17 +218,15 @@ def evaluate_tsv_file(file_path):
         'y_to_pred': [y_true.reshape(-1,1)]
     }
     
-    # Set up CUDA if available
     if not params.cpu:
         assert torch.cuda.is_available()
     symbolicregression.utils.CUDA = not params.cpu
     
-    # Initialize model
     model = Transformer(params=params, env=equation_env, samples=samples)
     model.to(params.device)
     
-    # Get metrics
-    metrics = evaluate_model_predictions(
+    # Get metrics and equation
+    results = evaluate_model_predictions(
         model_type='e2e',
         model=model,
         X=X,
@@ -204,51 +235,53 @@ def evaluate_tsv_file(file_path):
         equation_env=equation_env
     )
     
-    return metrics
+    # Create new row
+    new_row = pd.DataFrame([{
+        'dataset': dataset_name,
+        'model': 'tpsr',
+        'target_human_form': target_formula,
+        'prediction_human_form': results['equation'],
+        'mean_squared_error': results['mse'],
+        'R2_score': results['r2']
+    }])
+    
+    # Save/append to CSV
+    if os.path.exists(csv_file):
+        new_row.to_csv(csv_file, mode='a', header=False, index=False)
+    else:
+        new_row.to_csv(csv_file, index=False)
+    
+    return results
 
 def main():
-    # Load the sample data
-    file_path = "./filtered_silver_fish_datasets/val/f_12/f_12.tsv"
-    X, y_true = load_tsv_data(file_path)
+    # Directory containing TSV files
+    data_dir = "/home/k6wu/experiments/filtered_silver_fish_datasets/val"
+    output_dir = "/home/k6wu/experiments/TPSR/results"
     
-    print("Dataset shape:")
-    print(f"X shape: {X.shape}")
-    print(f"y shape: {y_true.shape}")
-    print("\nFirst few samples:")
-    print("X[:5]:", X[:5])
-    print("y[:5]:", y_true[:5])
+    # Create results directory
+    os.makedirs(output_dir, exist_ok=True)
     
-    # Load and evaluate E2E model
-    try:
-        # Initialize E2E model and environment
-        params = get_default_params()  # You'll need to implement this or pass params
-        equation_env = build_env(params)
-        modules = build_modules(equation_env, params)
-        samples = {'x_to_fit': 0, 'y_to_fit':0,'x_to_pred':0,'y_to_pred':0}
-        samples['x_to_fit'] = [X]
-        samples['y_to_fit'] = [y_true.reshape(-1,1)]
-        samples['x_to_pred'] = [X]
-        samples['y_to_pred'] = [y_true.reshape(-1,1)]
-
-        if not params.cpu:
-            assert torch.cuda.is_available()
-        symbolicregression.utils.CUDA = not params.cpu
-        model = Transformer(params=params, env=equation_env, samples=samples)
-        model.to(params.device)
-        
-        print("\nEvaluating E2E model:")
-        metrics_e2e = evaluate_model_predictions(
-            model_type='e2e',
-            model=model,
-            X=X,
-            y_true=y_true,
-            params=params,
-            equation_env=equation_env
-        )
-        print(f"E2E R² Score: {metrics_e2e['r2']:.4f}")
-        print(f"E2E MSE: {metrics_e2e['mse']:.4f}")
-    except ImportError:
-        print("Could not evaluate E2E model - required modules not found")
+    # Define CSV file path
+    csv_file = os.path.join(output_dir, "tpsr_results.csv")
+    
+    # Process each TSV file
+    for subdir in os.listdir(data_dir):
+        tsv_path = os.path.join(data_dir, subdir, f"{subdir}.tsv")
+        if os.path.exists(tsv_path):
+            print(f"\nProcessing {subdir}...")
+            try:
+                results = evaluate_tsv_file(tsv_path, data_dir, csv_file)
+                
+                # Print progress
+                print(f"Dataset: {subdir}")
+                print(f"Target Formula: {results.get('target_formula')}")
+                print(f"Predicted Formula: {results['equation']}")
+                print(f"R² Score: {results['r2']:.4f}")
+                print(f"MSE: {results['mse']:.4f}")
+            except Exception as e:
+                print(f"Error processing {subdir}: {str(e)}")
+    
+    print(f"\nResults saved to: {csv_file}")
 
 if __name__ == "__main__":
     main() 
